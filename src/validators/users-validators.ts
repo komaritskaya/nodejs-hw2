@@ -1,4 +1,12 @@
 import { NextFunction, Request, Response } from 'express';
+import Joi from 'joi';
+
+export const userSchema = Joi.object().keys({
+    login: Joi.string().required(),
+    password: Joi.string().pattern(new RegExp('(?=.*?[0-9])(?=.*?[A-Za-z]).+')).required(),
+    age: Joi.number().integer().min(4).max(130).required(),
+    isDeleted: Joi.boolean().required(),
+});
 
 function errorResponse(schemaErrors) {
     const errors = schemaErrors.map((error) => {
