@@ -1,36 +1,36 @@
-import { UsersModel } from '../models/users-model';
+import UsersService from '../services/users-service';
 import { NewUserData, SearchParams, User } from '../types';
 
-export class UsersController {
-    usersModel: UsersModel;
+export default class UsersController {
+    usersService: UsersService;
 
-    constructor(usersModel: UsersModel) {
-        this.usersModel = usersModel;
+    constructor(usersService: UsersService) {
+        this.usersService = usersService;
     }
 
-    getUsers(searchParams: SearchParams): User[] {
+    async getUsers(searchParams: SearchParams): Promise<User[]> {
         const { login, limit } = searchParams;
     
         if (!login && !limit) {
-            return this.usersModel.getAll();
+            return this.usersService.getAll();
         }
 
-        return this.usersModel.getFilteredUsers(login, limit);
+        return this.usersService.getFilteredUsers({ login, limit });
     }
 
-    getUserById(id: string): User | null {
-        return this.usersModel.getById(id);
+    async getUserById(id: string): Promise<User | null> {
+        return this.usersService.getById(id);
     }
 
-    createUser(payload: NewUserData) {
-        return this.usersModel.create(payload);
+    async createUser(payload: NewUserData): Promise<User> {
+        return this.usersService.create(payload);
     }
 
-    updateUser(id: string, payload: NewUserData) {
-        return this.usersModel.update(id, payload);
+    async updateUser(id: string, payload: NewUserData): Promise<User | null> {
+        return this.usersService.update(id, payload);
     }
 
-    deleteUser(id: string) {
-        return this.usersModel.delete(id);
+    async deleteUser(id: string): Promise<User | null> {
+        return this.usersService.delete(id);
     }
 }

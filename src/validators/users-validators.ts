@@ -5,7 +5,6 @@ export const userSchema = Joi.object().keys({
     login: Joi.string().required(),
     password: Joi.string().pattern(new RegExp('(?=.*?[0-9])(?=.*?[A-Za-z]).+')).required(),
     age: Joi.number().integer().min(4).max(130).required(),
-    isDeleted: Joi.boolean().required(),
 });
 
 function errorResponse(schemaErrors) {
@@ -26,7 +25,7 @@ export function validateSchema(schema) {
             allowUnknown: false
         });
 
-        if(error.isJoi) {
+        if(error && error.isJoi) {
             res.status(400).json(errorResponse(error.details));
         } else {
             next();
