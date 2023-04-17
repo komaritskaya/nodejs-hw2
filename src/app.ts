@@ -1,6 +1,7 @@
 import express from 'express';
 import router from './routes';
 import sequelize from './config/sequelize';
+import { initModels } from './models';
 
 const PORT = process.env.PORT || 3001;
 const app = express();
@@ -13,7 +14,8 @@ const connectToDB = async () => {
         console.error(`Connection failed: ${err}`);
     }
 
-    await sequelize.sync().catch((err) => console.error(err));
+    await sequelize.sync({ force: true }).catch((err) => console.error(err));
+    initModels();
 };
 
 
